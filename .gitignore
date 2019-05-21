@@ -38,6 +38,9 @@ jspm_packages
 
 #ide prefs
 .idea
+.vscode
 
 #mongodb
 data-node
+
+
