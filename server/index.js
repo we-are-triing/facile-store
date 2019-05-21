@@ -1,6 +1,9 @@
-import Hapi from "@hapi/hapi";
-import Inert from "@hapi/inert";
-import routes from "./routes.js";
+import Hapi from '@hapi/hapi';
+import Inert from '@hapi/inert';
+import Vision from '@hapi/vision';
+import HapiSwagger from 'hapi-swagger';
+import routes from './routes.js';
+import pj from './pj.cjs';
 
 //Keeping these in as a reference to support http2
 // import http2 from 'http2';
@@ -14,17 +17,29 @@ import routes from "./routes.js";
 const server = Hapi.server({
   // listener: http2.createServer(options),
   port: process.env.PORT || 8001,
-  host: process.env.HOST || "0.0.0.0"
+  host: process.env.HOST || '0.0.0.0'
 });
 
 const init = async () => {
-  await server.register(Inert);
+  await server.register([
+    Inert,
+    Vision,
+    {
+      plugin: HapiSwagger,
+      options: {
+        info: {
+          title: 'Facile APIs',
+          version: pj.version
+        }
+      }
+    }
+  ]);
   routes(server);
   await server.start();
   console.log(`Server running at: ${server.info.uri}`);
 };
 
-process.on("unhandledRejection", err => {
+process.on('unhandledRejection', err => {
   console.log(err);
   process.exit(1);
 });
