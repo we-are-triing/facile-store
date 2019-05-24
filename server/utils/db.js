@@ -1,5 +1,4 @@
 import mongodb from 'mongodb';
-import joi from '@hapi/joi';
 
 const MongoClient = mongodb.MongoClient;
 const dbName = `facile`;
