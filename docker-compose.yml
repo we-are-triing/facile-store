@@ -1,16 +1,14 @@
-version: "3"
+version: '3'
 services:
   web:
     build: .
     restart: always
     ports:
-      - "8001:8001"
+      - '8001:8001'
     volumes:
       - .:/home/node/app
-    depends_on:
+    links:
       - db
-    networks:
-      - the_network
   db:
     image: mongo
     restart: always
@@ -20,9 +18,3 @@ services:
     ports:
       - 27017:27017
     command: mongod --noauth --smallfiles
-    networks:
-      - the_network
-
-networks:
-  the_network:
-    driver: bridge

@@ -1,59 +1,10 @@
-import {mongo} from '../../utils/db.js';
-import boom from '@hapi/boom';
+import * as common from './common.js';
 
-const constants = {
-  templates: `templates`
-};
-
-export const getTemplates = async (req, h) => {
-  return mongo(async db => {
-    const templates = db.collection(constants.templates);
-    return await templates.find({}).toArray();
-  });
-};
-
-export const getTemplate = async (req, h) => {
-  return mongo(async db => {
-    const {type} = req.params;
-    const templates = db.collection(constants.templates);
-    return await templates.find({'meta.type': type}).toArray();
-  });
-};
-
-export const createTemplate = async (req, h) => {
-  return mongo(async db => {
-    const {type, icon, regions} = req.payload;
-    const templates = db.collection(constants.templates);
-    const temp = await templates.find({'meta.type': type}).toArray();
-    const exists = temp.length > 0;
-    if (exists) {
-      return boom.badRequest(`Template already exists`, {type, icon, regions});
-    }
-    return await templates.insertOne({
-      meta: {
-        type,
-        icon
-      },
-      regions
-    });
-  });
-};
-
-export const updateTemplate = async (req, h) => {
-  return mongo(async db => {
-    const {type, icon, regions} = req.payload;
-    const templates = db.collection(constants.templates);
-    return await templates.find({}).toArray();
-  });
-};
-
-export const deleteTemplate = async (req, h) => {
-  return mongo(async db => {
-    const {type} = req.payload;
-    const templates = db.collection(constants.templates);
-    return await templates.deleteOne({'meta.type': type});
-  });
-};
+export const create = async ({payload}) => common.createTemplate(payload);
+export const getAll = async () => common.getTemplates();
+export const get = async ({params}) => common.getTemplate(params.type);
+export const update = async ({payload}) => common.updateTemplate(payload);
+export const del = async ({payload}) => common.deleteTemplate(payload.type);
 
 /* 
 
@@ -69,6 +20,7 @@ a template is a component, with some specific opinions.
     icon: path, // this is the image that will represent the template type in the UI. // will provide some default ones to choose from.
     name: string, // needs to be unique, used as a key. (used in an instance of a template),
     img: uri, // uri would be the key for media.
+    // these are for instances
     slug: key,
     path: [key], // this would be the url path
     nav: [string], // this is the array of parents in the navigation, 

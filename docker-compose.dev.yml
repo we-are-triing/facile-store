@@ -1,17 +1,15 @@
-version: "3"
+version: '3'
 services:
   web:
     build: .
     ports:
-      - "8001:8001"
-      - "9229:9229"
+      - '8001:8001'
+      - '9229:9229'
     volumes:
       - .:/home/node/app
-    entrypoint: "npm run dev"
-    depends_on:
+    entrypoint: 'npm run dev'
+    links:
       - db
-    networks:
-      - the_network
   db:
     image: mongo
     restart: always
@@ -21,9 +19,3 @@ services:
     ports:
       - 27017:27017
     command: mongod --noauth --smallfiles
-    networks:
-      - the_network
-
-networks:
-  the_network:
-    driver: bridge

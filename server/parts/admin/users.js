@@ -1,15 +1,15 @@
-import {mongo} from '../../utils/db.js';
+import {mongo, constants} from '../../utils/db.js';
 
 export const getAllUsers = async (req, h) => {
   return mongo(async db => {
-    const users = db.collection('users');
+    const users = db.collection(constants.users);
     return await users.find({}).toArray();
   });
 };
 
 export const registerUsers = async (req, h) => {
   return mongo(async db => {
-    const users = db.collection('users');
+    const users = db.collection(constants.users);
     const {name} = req.payload;
     return await users.insertOne({name});
   });
