@@ -1,14 +1,16 @@
 version: '3'
 services:
-  web:
+  api:
     build: .
     ports:
       - '8001:8001'
-      - '9229:9229'
+      - '9001:9001'
     volumes:
       - .:/home/node/app
     entrypoint: 'npm run dev'
-    links:
+    networks:
+      - facile
+    depends_on:
       - db
   db:
     image: mongo
@@ -19,3 +21,9 @@ services:
     ports:
       - 27017:27017
     command: mongod --noauth --smallfiles
+    networks:
+      - facile
+networks:
+  facile:
+    external:
+      name: facile

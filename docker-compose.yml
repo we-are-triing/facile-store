@@ -1,13 +1,15 @@
 version: '3'
 services:
-  web:
+  api:
     build: .
     restart: always
     ports:
       - '8001:8001'
     volumes:
       - .:/home/node/app
-    links:
+    networks:
+      - facile
+    depends_on:
       - db
   db:
     image: mongo
@@ -18,3 +20,9 @@ services:
     ports:
       - 27017:27017
     command: mongod --noauth --smallfiles
+    networks:
+      - facile
+networks:
+  facile:
+    external:
+      name: facile

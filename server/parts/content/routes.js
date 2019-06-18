@@ -3,23 +3,23 @@ import * as templates from './templates.js';
 import * as components from './components.js';
 
 const componentTemplateValidation = {
-  type: joi.string().required(),
-  icon: joi.string().required(),
-  tags: joi.array().items(joi.string()),
-  regions: joi
-    .array()
-    .items({
-      meta: {
-        type: joi
-          .string()
-          .allow('single', 'fluid', 'fixed', 'static')
-          .required(),
-        shared: joi.boolean(),
-        name: joi.string()
-      },
-      components: joi.array().items(joi.string())
-    })
-    .required()
+  meta: joi.object({
+    type: joi.string().required(),
+    icon: joi.string().required(),
+    tags: joi.array().items(joi.string())
+  }),
+  values: joi.object({}).pattern(/[a-zA-Z _-]/, joi.string().valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`)),
+  regions: joi.array().items({
+    meta: joi.object({
+      type: joi
+        .string()
+        .valid(`fluid`, `fixed`, `single`, `static`)
+        .required(),
+      shared: joi.boolean(),
+      name: joi.string()
+    }),
+    components: joi.array().items(joi.string())
+  })
 };
 
 const typeValidation = {

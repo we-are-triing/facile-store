@@ -3,20 +3,14 @@ import boom from '@hapi/boom';
 
 const create = async (tc, payload) => {
   return mongo(async db => {
-    const {type, icon, tags, regions} = payload;
+    const {meta, values, regions} = payload;
+    const {type} = meta;
     const collection = db.collection(tc);
 
     if (await hasItemByType(collection, type)) {
-      return boom.badRequest(`${tc} already exists`, {type, icon, tags, regions});
+      return boom.badRequest(`${tc} already exists`, {meta, values, regions});
     }
-    return await collection.insertOne({
-      meta: {
-        type,
-        tags,
-        icon
-      },
-      regions
-    });
+    return await collection.insertOne({meta, values, regions});
   });
 };
 
@@ -33,10 +27,11 @@ const get = async (tc, type) => {
 
 const update = async (tc, payload) => {
   return mongo(async db => {
-    const {type, icon, tags, regions} = payload;
+    const {meta, values, regions} = payload;
+    const {type} = meta;
     const collection = db.collection(tc);
-    // TODO: to updaty stuff here.
-    return await collection.find({}).toArray();
+
+    return await collection.replaceOne({'meta.type': type}, {meta, values, regions});
   });
 };
 

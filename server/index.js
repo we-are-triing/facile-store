@@ -17,7 +17,11 @@ import pj from './pj.cjs';
 const server = Hapi.server({
   // listener: http2.createServer(options),
   port: process.env.PORT || 8001,
-  host: process.env.HOST || '0.0.0.0'
+  routes: {
+    cors: {
+      origin: ['http://localhost:8000']
+    }
+  }
 });
 
 const init = async () => {
