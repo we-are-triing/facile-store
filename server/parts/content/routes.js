@@ -78,7 +78,7 @@ export default server => {
       handler: templates.update
     },
     {
-      method: `POST`,
+      method: `DELETE`,
       path: `/content/template/delete`,
       options: {
         description: `deletes template`,
@@ -140,7 +140,7 @@ export default server => {
       handler: components.update
     },
     {
-      method: `POST`,
+      method: `DELETE`,
       path: `/content/component/delete`,
       options: {
         description: `deletes template`,
