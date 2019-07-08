@@ -8,18 +8,28 @@ const componentTemplateValidation = {
     icon: joi.string().required(),
     tags: joi.array().items(joi.string())
   }),
-  values: joi.object({}).pattern(/[a-zA-Z _-]/, joi.string().valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`)),
-  regions: joi.array().items({
-    meta: joi.object({
-      type: joi
-        .string()
-        .valid(`fluid`, `fixed`, `single`, `static`)
-        .required(),
-      shared: joi.boolean(),
-      name: joi.string()
-    }),
-    components: joi.array().items(joi.string())
-  })
+  values: joi.array().items(
+    joi
+      .object({
+        name: joi
+          .string()
+          .regex(/[a-zA-Z _-]/)
+          .required(),
+        type: joi
+          .string()
+          .valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`)
+          .required()
+      })
+      .when(joi.object({type: `region`}).unknown(), {
+        then: joi.object({
+          region: joi
+            .string()
+            .valid(`fluid`, `fixed`, `single`, `static`)
+            .required(),
+          components: joi.array().items(joi.string())
+        })
+      })
+  )
 };
 
 const typeValidation = {

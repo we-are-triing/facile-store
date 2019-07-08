@@ -3,14 +3,14 @@ import boom from '@hapi/boom';
 
 const create = async (tc, payload) => {
   return mongo(async db => {
-    const {meta, values, regions} = payload;
+    const {meta, values} = payload;
     const {type} = meta;
     const collection = db.collection(tc);
 
     if (await hasItemByType(collection, type)) {
-      return boom.badRequest(`${tc} already exists`, {meta, values, regions});
+      return boom.badRequest(`${tc} already exists`, {meta, values});
     }
-    return await collection.insertOne({meta, values, regions});
+    return await collection.insertOne({meta, values});
   });
 };
 
@@ -27,11 +27,11 @@ const get = async (tc, type) => {
 
 const update = async (tc, payload) => {
   return mongo(async db => {
-    const {meta, values, regions} = payload;
+    const {meta, values} = payload;
     const {type} = meta;
     const collection = db.collection(tc);
 
-    return await collection.replaceOne({'meta.type': type}, {meta, values, regions});
+    return await collection.replaceOne({'meta.type': type}, {meta, values});
   });
 };
 
