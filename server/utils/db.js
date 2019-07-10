@@ -19,6 +19,7 @@ const connect = async () => {
 export const constants = {
   templates: `templates`,
   components: `components`,
+  media: `media`,
   users: `users`
 };
 
