@@ -11,8 +11,12 @@ const mediaValidation = joi.object({
   tags: joi.array().items(joi.string()),
   name: nameValidation,
   filename: nameValidation,
-  //TODO: figure out what meta data we need to extract from here.
-  meta: joi.string(),
+  meta: joi.object({
+    name: joi.string(),
+    lastModified: joi.number(),
+    size: joi.number(),
+    type: joi.string()
+  }),
   master: nameValidation
 });
 
@@ -38,7 +42,7 @@ export default server => {
           });
         } catch (err) {
           console.error(``, err);
-          return `fourOFour()`;
+          return boom.badImplementation(`something done broke`);
         }
       }
     },
@@ -62,7 +66,7 @@ export default server => {
           });
         } catch (err) {
           console.error(``, err);
-          return `fourOFour()`;
+          return boom.badImplementation(`something done broke`);
         }
       }
     },
@@ -71,7 +75,7 @@ export default server => {
       path: `/media`,
       options: {
         description: `Deletes media item by filename`,
-        notes: `This is the generated unique filename, not the user defined one.`,
+        notes: `This is the generated unique filename, not the user defined name.`,
         tags: [`api`, `media`],
         validate: {
           payload: filenameValidation
@@ -86,7 +90,7 @@ export default server => {
           });
         } catch (err) {
           console.error(``, err);
-          return `fourOFour()`;
+          return boom.badImplementation(`something done broke`);
         }
       }
     },
@@ -101,16 +105,16 @@ export default server => {
           payload: mediaValidation
         }
       },
-      handler: async ({params, payload}, h) => {
+      handler: async req => {
         try {
           return mongo(async db => {
-            const {filename, meta = '', tags = [], name, master = 'self'} = payload;
+            const {filename, meta = '', tags = [], name, master = 'self'} = req.payload;
             const collection = db.collection(constants.media);
             return await collection.replaceOne({filename}, {filename, meta, tags, name, master}, {upsert: true});
           });
         } catch (err) {
           console.error(``, err);
-          return `fourOFour()`;
+          return boom.badImplementation(`something done broke`);
         }
       }
     }
