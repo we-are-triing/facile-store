@@ -14,15 +14,17 @@ const create = async (tc, payload) => {
   });
 };
 
-const getAll = async (tc, query = {}) => {
+const query = async (tc, q = {}) => {
   return mongo(async db => {
     const collection = db.collection(tc);
-    return await collection.find(query).toArray();
+    return await collection.find(q).toArray();
   });
 };
 
+const getAll = async tc => query(tc);
+
 const get = async (tc, type) => {
-  return getAll(tc, {'meta.type': type});
+  return query(tc, {'meta.type': type});
 };
 
 const update = async (tc, payload) => {

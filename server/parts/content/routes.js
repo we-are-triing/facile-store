@@ -1,6 +1,7 @@
 import joi from '@hapi/joi';
 import * as templates from './templates.js';
 import * as components from './components.js';
+import * as content from './content.js';
 
 const componentTemplateValidation = {
   meta: joi.object({
@@ -13,7 +14,7 @@ const componentTemplateValidation = {
       .object({
         name: joi
           .string()
-          .regex(/[a-zA-Z _-]/)
+          .regex(/[a-zA-Z0-9 _-]/)
           .required(),
         type: joi
           .string()
@@ -36,11 +37,50 @@ const typeValidation = {
   type: joi.string().required()
 };
 
-export default server => {
+const contentValidation = {
+  meta: joi.object({
+    name: joi
+      .string()
+      .regex(/[a-zA-Z0-9 _-]/)
+      .required(),
+    type: joi
+      .string()
+      .regex(/[a-zA-Z0-9 _-]/)
+      .required(),
+    slug: joi
+      .string()
+      .regex(/[a-zA-Z0-9_-]/)
+      .required(),
+    path: joi.array().items(joi.string()),
+    menu: joi.array().items(joi.string()),
+    tags: joi.array().items(joi.string()),
+    publish_date: joi.date(),
+    status: joi
+      .string()
+      .valid('draft', 'scheduled', 'published')
+      .required(),
+    approvals: joi.object({
+      editor: {userID: joi.string(), date: joi.date()},
+      designer: {userID: joi.string(), date: joi.date()},
+      translator: {userID: joi.string(), date: joi.date()}
+    })
+  }),
+  values: joi.array().items({
+    name: joi.string(),
+    value: joi.string()
+  }),
+  regions: joi.array().items({
+    meta: joi.object(),
+    values: joi.array(),
+    regions: joi.array()
+  })
+};
+
+const templateRoutes = server => {
   server.route([
     {
       method: `GET`,
-      path: `/content/templates`,
+      path: `/templates`,
       options: {
         description: `Get all templates`,
         notes: `this is not the content, but the templates to fill out.`,
@@ -50,7 +90,7 @@ export default server => {
     },
     {
       method: `GET`,
-      path: `/content/template/{type}`,
+      path: `/template/{type}`,
       options: {
         description: `Get template by type`,
         notes: `this is not the content, but the template to fill out.`,
@@ -63,7 +103,7 @@ export default server => {
     },
     {
       method: `POST`,
-      path: `/content/template/create`,
+      path: `/template/create`,
       options: {
         description: `Creates templates`,
         notes: `Create a template ready to be used.`,
@@ -76,7 +116,7 @@ export default server => {
     },
     {
       method: `POST`,
-      path: `/content/template/update/{type}`,
+      path: `/template/update`,
       options: {
         description: `Updates templates`,
         notes: `Update a template ready to be used.`,
@@ -89,7 +129,7 @@ export default server => {
     },
     {
       method: `DELETE`,
-      path: `/content/template/delete`,
+      path: `/template/delete`,
       options: {
         description: `deletes template`,
         notes: `deletes specified template`,
@@ -99,10 +139,14 @@ export default server => {
         }
       },
       handler: templates.del
-    },
+    }
+  ]);
+};
+const componentRoutes = server => {
+  server.route([
     {
       method: `GET`,
-      path: `/content/components`,
+      path: `/components`,
       options: {
         description: `Get all components`,
         notes: `this is not the content, but the components to fill out.`,
@@ -112,7 +156,7 @@ export default server => {
     },
     {
       method: `GET`,
-      path: `/content/component/{type}`,
+      path: `/component/{type}`,
       options: {
         description: `Get component by type`,
         notes: `this is not the content, but the component to fill out.`,
@@ -125,7 +169,7 @@ export default server => {
     },
     {
       method: `POST`,
-      path: `/content/component/create`,
+      path: `/component/create`,
       options: {
         description: `Creates component`,
         notes: `Create a component ready to be used.`,
@@ -138,11 +182,11 @@ export default server => {
     },
     {
       method: `POST`,
-      path: `/content/component/update/{type}`,
+      path: `/component/update`,
       options: {
         description: `Updates component`,
-        notes: `Update a template ready to be used.`,
-        tags: [`api`, `content`, `template`],
+        notes: `Update a component ready to be used.`,
+        tags: [`api`, `content`, `component`],
         validate: {
           payload: componentTemplateValidation
         }
@@ -151,11 +195,11 @@ export default server => {
     },
     {
       method: `DELETE`,
-      path: `/content/component/delete`,
+      path: `/component/delete`,
       options: {
-        description: `deletes template`,
-        notes: `deletes specified template`,
-        tags: [`api`, `content`, `template`],
+        description: `deletes component`,
+        notes: `deletes specified component`,
+        tags: [`api`, `content`, `component`],
         validate: {
           payload: typeValidation
         }
@@ -163,4 +207,76 @@ export default server => {
       handler: components.del
     }
   ]);
+};
+const contentRoutes = server => {
+  server.route([
+    {
+      method: `GET`,
+      path: `/content`,
+      options: {
+        description: `Get all content`,
+        notes: `Returns a list of all content.`,
+        tags: [`api`, `content`]
+      },
+      handler: content.getAll
+    },
+    {
+      method: `GET`,
+      path: `/content/{name}`,
+      options: {
+        description: `Get content by name`,
+        notes: `This gets the content item by assigned name.`,
+        tags: [`api`, `content`],
+        validate: {
+          params: typeValidation
+        }
+      },
+      handler: content.get
+    },
+    {
+      method: `POST`,
+      path: `/content/create`,
+      options: {
+        description: `Creates content`,
+        notes: `Create content ready to be delivered.`,
+        tags: [`api`, `content`, `components`],
+        validate: {
+          payload: contentValidation
+        }
+      },
+      handler: content.create
+    },
+    {
+      method: `POST`,
+      path: `/content/update`,
+      options: {
+        description: `Updates content`,
+        notes: `Update content.`,
+        tags: [`api`, `content`],
+        validate: {
+          payload: contentValidation
+        }
+      },
+      handler: content.update
+    },
+    {
+      method: `DELETE`,
+      path: `/content/delete`,
+      options: {
+        description: `deletes content`,
+        notes: `deletes specified content`,
+        tags: [`api`, `content`],
+        validate: {
+          payload: typeValidation
+        }
+      },
+      handler: content.del
+    }
+  ]);
+};
+
+export default server => {
+  templateRoutes(server);
+  componentRoutes(server);
+  contentRoutes(server);
 };

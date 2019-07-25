@@ -33,8 +33,7 @@ Component data structure:
     (limited set): indicates there is a finite number of options available.
     [type]: An array of Type.
     region: can put a region in a component
-  ],
-  regions: [] // this uses a region to populate the content.
+  ]
 }
 
 provided components:
