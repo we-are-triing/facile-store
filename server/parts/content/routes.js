@@ -37,6 +37,10 @@ const typeValidation = {
   type: joi.string().required()
 };
 
+const nameValidation = {
+  name: joi.string().required()
+};
+
 const contentValidation = {
   meta: joi.object({
     name: joi
@@ -228,7 +232,7 @@ const contentRoutes = server => {
         notes: `This gets the content item by assigned name.`,
         tags: [`api`, `content`],
         validate: {
-          params: typeValidation
+          params: nameValidation
         }
       },
       handler: content.get
@@ -267,7 +271,7 @@ const contentRoutes = server => {
         notes: `deletes specified content`,
         tags: [`api`, `content`],
         validate: {
-          payload: typeValidation
+          payload: nameValidation
         }
       },
       handler: content.del

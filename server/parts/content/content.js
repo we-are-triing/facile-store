@@ -25,7 +25,7 @@ export const query = async (q = {}) => {
 export const getAll = async () => query();
 
 export const get = async ({params}) => {
-  const {name} = payload;
+  const {name} = params;
   return query({'meta.name': name});
 };
 
