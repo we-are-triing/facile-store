@@ -69,7 +69,7 @@ Content structure - the filled out templates and components
   values: {}, // a template may have values, they would be, title, social stuff, non presented data.
   regions: [{
     meta: {
-
+      type: string
     },
     values: {
 

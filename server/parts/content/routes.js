@@ -74,7 +74,7 @@ const contentValidation = {
     value: joi.string()
   }),
   regions: joi.array().items({
-    meta: joi.object(),
+    meta: joi.object({type: joi.string()}),
     values: joi.array(),
     regions: joi.array()
   })
