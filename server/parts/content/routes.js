@@ -18,7 +18,7 @@ const componentTemplateValidation = {
           .required(),
         type: joi
           .string()
-          .valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`)
+          .valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`, `path`)
           .required()
       })
       .when(joi.object({type: `region`}).unknown(), {
@@ -28,6 +28,11 @@ const componentTemplateValidation = {
             .valid(`fluid`, `fixed`, `single`, `static`)
             .required(),
           components: joi.array().items(joi.string())
+        })
+      })
+      .when(joi.object({type: `set`}).unknown(), {
+        then: joi.object({
+          set: joi.array().items(joi.string())
         })
       })
   )
