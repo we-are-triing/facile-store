@@ -4,6 +4,7 @@ import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
 import routes from './parts/routes.js';
 import pj from './pj.cjs';
+import Boom from '@hapi/boom';
 
 //Keeping these in as a reference to support http2
 // import http2 from 'http2';
@@ -20,6 +21,17 @@ const server = Hapi.server({
   routes: {
     cors: {
       origin: ['http://localhost:8000']
+    },
+    validate: {
+      failAction: async (request, h, err) => {
+        if (process.env.NODE_ENV === 'production') {
+          console.error('ValidationError:', err.message);
+          throw Boom.badRequest(`Invalid request payload input`);
+        } else {
+          console.error(err);
+          throw err;
+        }
+      }
     }
   }
 });

@@ -19,7 +19,11 @@ const componentTemplateValidation = {
         type: joi
           .string()
           .valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`, `path`)
-          .required()
+          .required(),
+        set: joi.when('type', {
+          is: `set`,
+          then: joi.array().items(joi.string())
+        })
       })
       .when(joi.object({type: `region`}).unknown(), {
         then: joi.object({
@@ -28,11 +32,6 @@ const componentTemplateValidation = {
             .valid(`fluid`, `fixed`, `single`, `static`)
             .required(),
           components: joi.array().items(joi.string())
-        })
-      })
-      .when(joi.object({type: `set`}).unknown(), {
-        then: joi.object({
-          set: joi.array().items(joi.string())
         })
       })
   )
@@ -64,22 +63,15 @@ const contentValidation = {
     menu: joi.array().items(joi.string()),
     tags: joi.array().items(joi.string()),
     publish_date: joi.date(),
-    status: joi
-      .string()
-      .valid('draft', 'scheduled', 'published')
-      .required(),
     approvals: joi.object({
       editor: {userID: joi.string(), date: joi.date()},
       designer: {userID: joi.string(), date: joi.date()},
       translator: {userID: joi.string(), date: joi.date()}
     })
   }),
-  values: joi.array().items({
-    name: joi.string(),
-    value: joi.string()
-  }),
+  values: joi.object(),
   regions: joi.array().items({
-    meta: joi.object({type: joi.string()}),
+    meta: joi.object(),
     values: joi.array(),
     regions: joi.array()
   })
