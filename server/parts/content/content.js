@@ -29,7 +29,6 @@ export const get = async ({params}) => {
 
 export const update = async ({payload}) => {
   return mongo(async db => {
-    console.log(payload);
     const {meta, values, regions} = payload;
     const {name} = meta;
     const content = db.collection(constants.content);
