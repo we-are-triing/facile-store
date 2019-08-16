@@ -37,29 +37,37 @@ const componentTemplateValidation = {
   )
 };
 
+const nameReg = /[a-zA-Z0-9 _\-]+/;
+const urlReg = /[a-zA-Z0-9 _\-/]+/;
+
 const typeValidation = {
-  type: joi.string().required()
+  type: joi
+    .string()
+    .regex(nameReg)
+    .required()
 };
 
 const nameValidation = {
-  name: joi.string().required()
+  name: joi
+    .string()
+    .regex(nameReg)
+    .required()
 };
 
 const contentValidation = {
   meta: joi.object({
     name: joi
       .string()
-      .regex(/[a-zA-Z0-9 _-]/)
+      .regex(nameReg)
       .required(),
     type: joi
       .string()
-      .regex(/[a-zA-Z0-9 _-]/)
+      .regex(nameReg)
       .required(),
-    slug: joi
-      .string()
-      .regex(/[a-zA-Z0-9_-]/)
+    path: joi
+      .array()
+      .items(joi.string().regex(urlReg))
       .required(),
-    path: joi.array().items(joi.string()),
     menu: joi.array().items(joi.string()),
     tags: joi.array().items(joi.string()),
     publish_date: joi.date(),

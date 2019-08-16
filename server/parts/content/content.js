@@ -1,11 +1,9 @@
 import {constants, mongo, hasItemByName} from '../../utils/db.js';
 import boom from '@hapi/boom';
 
-const CONTENT = 'content';
-
 export const create = async ({payload}) => {
   return mongo(async db => {
-    const content = db.collection(CONTENT);
+    const content = db.collection(constants.content);
     const {meta, values, regions} = payload;
     const {name} = meta;
     if (await hasItemByName(content, name)) {
@@ -17,7 +15,7 @@ export const create = async ({payload}) => {
 
 export const query = async (q = {}) => {
   return mongo(async db => {
-    const content = db.collection(CONTENT);
+    const content = db.collection(constants.content);
     return await content.find(q).toArray();
   });
 };
@@ -34,7 +32,7 @@ export const update = async ({payload}) => {
     console.log(payload);
     const {meta, values, regions} = payload;
     const {name} = meta;
-    const content = db.collection(CONTENT);
+    const content = db.collection(constants.content);
 
     return await content.replaceOne({'meta.name': name}, {meta, values, regions});
   });
@@ -43,7 +41,7 @@ export const update = async ({payload}) => {
 export const del = async ({payload}) => {
   return mongo(async db => {
     const {name} = payload;
-    const content = db.collection(CONTENT);
+    const content = db.collection(constants.content);
     return await content.deleteOne({'meta.name': name});
   });
 };
@@ -55,7 +53,6 @@ Content structure - the filled out templates and components
   meta: {
     name: string
     type: string (template key)
-    slug: string
     path: string
     menu: string
     tags: [string]

@@ -20,7 +20,8 @@ export const constants = {
   templates: `templates`,
   components: `components`,
   media: `media`,
-  users: `users`
+  users: `users`,
+  content: 'content'
 };
 
 export const mongo = async (func, error) => {

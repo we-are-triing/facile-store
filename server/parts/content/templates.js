@@ -29,7 +29,6 @@ a template is a component, with some specific opinions.
       title: ,
       description: ,
       image: ,
-      slug: ,
       region: 
       {
         meta: {
