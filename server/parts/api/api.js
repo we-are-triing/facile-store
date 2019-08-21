@@ -33,8 +33,9 @@ const send = content => {
 };
 
 const getStatus = date => {
+  const d = new Date();
+  const today = d.getTime();
   const d2 = new Date(date);
-
   const pub = d2.getTime();
 
   if (pub === NaN || pub === 0) {
