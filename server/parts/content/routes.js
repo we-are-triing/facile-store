@@ -64,10 +64,7 @@ const contentValidation = {
       .string()
       .regex(nameReg)
       .required(),
-    path: joi
-      .array()
-      .items(joi.string().regex(urlReg))
-      .required(),
+    path: joi.array().items(joi.string().regex(urlReg)),
     menu: joi.array().items(joi.string()),
     tags: joi.array().items(joi.string()),
     publish_date: joi.date(),
