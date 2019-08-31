@@ -3,6 +3,9 @@ import * as templates from './templates.js';
 import * as components from './components.js';
 import * as content from './content.js';
 
+const nameReg = /[a-zA-Z0-9 _\-]+/;
+const urlReg = /[a-zA-Z0-9 _\-/]+/;
+
 const componentTemplateValidation = {
   meta: joi.object({
     type: joi.string().required(),
@@ -14,7 +17,7 @@ const componentTemplateValidation = {
       .object({
         name: joi
           .string()
-          .regex(/[a-zA-Z0-9 _-]/)
+          .regex(nameReg)
           .required(),
         type: joi
           .string()
@@ -36,9 +39,6 @@ const componentTemplateValidation = {
       })
   )
 };
-
-const nameReg = /[a-zA-Z0-9 _\-]+/;
-const urlReg = /[a-zA-Z0-9 _\-/]+/;
 
 const typeValidation = {
   type: joi

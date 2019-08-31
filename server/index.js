@@ -20,7 +20,7 @@ const server = Hapi.server({
   port: process.env.PORT || 8001,
   routes: {
     cors: {
-      origin: ['http://localhost:8000']
+      origin: ['http://localhost:8000', 'http://localhost:8002']
     },
     validate: {
       failAction: async (request, h, err) => {

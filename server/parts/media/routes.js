@@ -1,10 +1,13 @@
 import {constants, mongo, hasItemByType} from '../../utils/db.js';
 import boom from '@hapi/boom';
 import joi from '@hapi/joi';
+import fetch from 'node-fetch';
+
+const nameReg = /[a-zA-Z0-9 _\-]+/;
 
 const nameValidation = joi
   .string()
-  .regex(/[a-zA-Z0-9 _.-]/)
+  .regex(nameReg)
   .required();
 
 const mediaValidation = joi.object({
@@ -75,7 +78,7 @@ export default server => {
       path: `/media`,
       options: {
         description: `Deletes media item by filename`,
-        notes: `This is the generated unique filename, not the user defined name.`,
+        notes: `This is the generated unique filename, not the user defined name. This should only be called from the media server.`,
         tags: [`api`, `media`],
         validate: {
           payload: filenameValidation
@@ -84,6 +87,23 @@ export default server => {
       handler: async (req, h) => {
         try {
           const {filename} = req.payload;
+          const derivatives = mongo(async db => {
+            const collection = db.collection(constants.media);
+            return collection.find({master: filename}).toArray();
+          });
+          if (derivatives.length > 0) {
+            // TODO: get better URL stragedy.
+            const temp = derivatives.map(async media =>
+              fetch(`http://localhost:8002/media`, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'DELETE',
+                body: {filename: media.filename}
+              })
+            );
+
+            await Promise.all(temp);
+          }
+
           return mongo(async db => {
             const collection = db.collection(constants.media);
             return await collection.deleteOne({filename});
