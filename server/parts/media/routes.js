@@ -51,6 +51,33 @@ export default server => {
     },
     {
       method: `GET`,
+      path: `/media/q/{query}`,
+      options: {
+        description: `Gets all information for a subset of media based on a query.`,
+        notes: `this returns an array of a filtered set of media on given query.`,
+        tags: [`api`, `media`],
+        validate: {
+          params: {
+            query: nameValidation
+          }
+        }
+      },
+      handler: async (req, h) => {
+        try {
+          const {query} = req.params;
+          return mongo(async db => {
+            const collection = db.collection(constants.media);
+            const result = await collection.find({$or: [{name: {$regex: `${query}`, $options: 'i'}}, {name: {$regex: `${query}`, $options: 'i'}}, {tags: {$regex: `${query}`, $options: 'i'}}]}).toArray();
+            return result.map(({filename, name}) => ({filename, name}));
+          });
+        } catch (err) {
+          console.error(``, err);
+          return boom.badImplementation(`something done broke`);
+        }
+      }
+    },
+    {
+      method: `GET`,
       path: `/media/{filename}`,
       options: {
         description: `Gets the information of a media asset.`,

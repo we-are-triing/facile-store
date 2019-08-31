@@ -21,7 +21,7 @@ const componentTemplateValidation = {
           .required(),
         type: joi
           .string()
-          .valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`, `path`)
+          .valid(`string`, `text`, `text_block`, `number`, `boolean`, `object`, `region`, `set`, `list`, `media`)
           .required(),
         set: joi.when('type', {
           is: `set`,
