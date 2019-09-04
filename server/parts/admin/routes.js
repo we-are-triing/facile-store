@@ -1,5 +1,5 @@
 import {getAllUsers, registerUsers} from './users.js';
-import {init} from './site.js';
+import {init, getSiteData} from './site.js';
 import joi from '@hapi/joi';
 
 export default server => {
@@ -14,16 +14,22 @@ export default server => {
         validate: {
           payload: {
             org: joi.string().required(),
-            clientId: joi.string().required(),
-            clientSecret: joi.string().required(),
-            name: joi.string().required(),
-            image: joi.string(),
-            email: joi.string(),
-            token: joi.string().required()
+            id: joi.string().required(),
+            secret: joi.string().required()
           }
         }
       },
       handler: init
+    },
+    {
+      method: `GET`,
+      path: `/admin/site`,
+      options: {
+        description: `Get site data`,
+        notes: `Shows all site data`,
+        tags: [`api`]
+      },
+      handler: getSiteData
     },
     {
       method: `POST`,

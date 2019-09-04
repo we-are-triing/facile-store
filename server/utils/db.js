@@ -21,7 +21,8 @@ export const constants = {
   components: `components`,
   media: `media`,
   users: `users`,
-  content: 'content'
+  content: 'content',
+  admin: 'admin'
 };
 
 export const mongo = async (func, error) => {
@@ -43,7 +44,6 @@ export const hasItem = async (collection, query) => {
 };
 
 export const hasItemByType = async (collection, type) => await hasItem(collection, {'meta.type': type});
-
 export const hasItemByName = async (collection, name) => await hasItem(collection, {'meta.name': name});
 
 connect();
