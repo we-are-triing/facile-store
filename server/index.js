@@ -19,9 +19,6 @@ const server = Hapi.server({
   // listener: http2.createServer(options),
   port: process.env.PORT || 8001,
   routes: {
-    cors: {
-      origin: ['http://localhost:8000', 'http://localhost:8002']
-    },
     validate: {
       failAction: async (request, h, err) => {
         if (process.env.NODE_ENV === 'production') {

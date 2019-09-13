@@ -1,4 +1,4 @@
-import {getAllUsers, registerUsers} from './users.js';
+import {getAllUsers, registerUser, checkAdmin, getUser} from './users.js';
 import {init, getSiteData} from './site.js';
 import joi from '@hapi/joi';
 
@@ -40,11 +40,22 @@ export default server => {
         tags: [`api`],
         validate: {
           payload: {
-            name: joi.string().required()
+            id: joi.string().required(),
+            profile: {
+              name: joi.string().required(),
+              email: joi.string().required(),
+              img: joi.string().required()
+            },
+            roles: joi
+              .array()
+              .items(joi.string())
+              .required(),
+            admin: joi.boolean().required(),
+            translator: joi.array().items(joi.string())
           }
         }
       },
-      handler: registerUsers
+      handler: registerUser
     },
     {
       method: `GET`,
@@ -55,6 +66,31 @@ export default server => {
         tags: [`api`]
       },
       handler: getAllUsers
+    },
+    {
+      method: `GET`,
+      path: `/admin/user/{id}`,
+      options: {
+        description: `Get All Users`,
+        notes: `Shows all user info 😋`,
+        tags: [`api`],
+        validate: {
+          params: {
+            id: joi.string().required()
+          }
+        }
+      },
+      handler: getUser
+    },
+    {
+      method: `GET`,
+      path: `/admin/checkAdmin`,
+      options: {
+        description: `Get All Users`,
+        notes: `Shows all user info 😋`,
+        tags: [`api`]
+      },
+      handler: checkAdmin
     }
   ]);
 };

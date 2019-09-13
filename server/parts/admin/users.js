@@ -7,18 +7,54 @@ export const getAllUsers = async (req, h) => {
   });
 };
 
-export const registerUsers = async (req, h) => {
+export const getUser = async req => {
   return mongo(async db => {
+    const {id} = req.params;
     const users = db.collection(constants.users);
-    const {name} = req.payload;
-    return await users.insertOne({name});
+    const user = await users.find({id}).toArray();
+    return user[0];
   });
 };
+
+export const registerUser = async (req, h) => {
+  return mongo(async db => {
+    const users = db.collection(constants.users);
+    const {id, profile, roles, admin, translator} = req.payload;
+    return await users.insertOne({
+      id,
+      profile,
+      roles,
+      admin,
+      translator
+    });
+  });
+};
+
+export const checkAdmin = async (req, h) => {
+  return mongo(async db => {
+    const users = db.collection(constants.users);
+    const res = await users.find().toArray();
+    return res.length > 0;
+  });
+};
+/*
+{
+id: 
+profile: {
+  name:
+  email:
+  img:
+}
+roles: //editor, designer, author
+admin
+translator: []
+}
+*/
 
 /* 
 all roles inherit all abilities below them. IE an editor has all the ability of designer, author but not an admin.
 roles:
-- admin
+- admin*
   - edit user and site data
 - editor
   - approves content for publishing
@@ -29,5 +65,6 @@ roles:
 - translator*
   - sees translation interface for a single or set of languages.
 
-* translator is a special role that can be applied to other roles for a particular language or set of langugages. Only the admin has access to all translation ability unless specifically assigned.
+* translator and admin are special roles that can be applied to other roles 
+* translator can be applid for a particular language or set of langugages.
 */
