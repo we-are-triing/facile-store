@@ -9,7 +9,10 @@ export const getById = async ({params}) => {
 
 export const getByPath = async ({params}) => {
   const {path} = params;
-  const arr = await queryByPath(path.join('/'));
+  const i = path.lastIndexOf('/');
+  const p = path.substring(0, i).split('/');
+  const id = path.substring(i + 1);
+  const arr = await queryByPath(p, id);
   return send(arr[0]);
 };
 
@@ -20,7 +23,6 @@ const send = content => {
   if (status !== 'published') {
     return boom.notFound(`It isn't here or isn't ready to show.`);
   }
-  // TODO: merge the media in. I want to store the media as an ID, not a URL, but the interface currently is a URL.
   const {meta, values = {}, regions = []} = content;
   return {
     meta: {
@@ -31,6 +33,10 @@ const send = content => {
     regions
   };
 };
+
+// TODO: merge the media in. I want to store the media as an ID, not a URL, but the interface currently is a URL.
+// TODO: recursive function to parse image paths, and markdown.
+const messageContent = content => {};
 
 const getStatus = date => {
   const d = new Date();
@@ -55,4 +61,4 @@ const query = async (q = {}) => {
 };
 
 const queryById = async id => query({'meta.name': id});
-const queryByPath = async path => query({'meta.path': path});
+const queryByPath = async (path, id) => query({'meta.path': path, 'meta.name': id});
