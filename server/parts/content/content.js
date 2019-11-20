@@ -53,7 +53,6 @@ Content structure - the filled out templates and components
     name: string
     type: string (template key)
     path: string
-    menu: string
     tags: [string]
     publish_date: 
     status: [draft, scheduled, published]
