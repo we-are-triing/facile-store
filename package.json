@@ -1,6 +1,6 @@
 {
   "name": "facile-store",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "DB, adaptors, and api for facile studio",
   "main": "server/index.js",
   "repository": {
@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "node --experimental-modules server/index.js",
-    "dev": "NODE_ENV=dev nodemon --inspect=0.0.0.0:9001 --experimental-modules server/index.js"
+    "dev": "NODE_ENV=dev nodemon --inspect=0.0.0.0:24051 --experimental-modules server/index.js"
   },
   "dependencies": {
     "@hapi/boom": "^7.4.2",

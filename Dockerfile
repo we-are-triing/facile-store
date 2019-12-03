@@ -1,6 +1,6 @@
 FROM node:12-alpine
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
+RUN mkdir -p /home/node/store/node_modules && chown -R node:node /home/node/store
+WORKDIR /home/node/store
 COPY package*.json ./
 
 USER node

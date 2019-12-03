@@ -6,7 +6,7 @@ services:
     ports:
       - '24041:24041'
     volumes:
-      - .:/home/node/app
+      - .:/home/node/store
     networks:
       - facile
     depends_on:
@@ -19,7 +19,7 @@ services:
       - ./data-node:/data/db
     ports:
       - 27017:27017
-    command: mongod --noauth --smallfiles
+    command: mongod --noauth
     networks:
       - facile
 networks:

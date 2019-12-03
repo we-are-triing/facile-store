@@ -6,7 +6,7 @@ services:
       - '24041:24041'
       - '24051:24051'
     volumes:
-      - .:/home/node/app
+      - .:/home/node/store
     entrypoint: 'npm run dev'
     networks:
       - facile
