@@ -1,6 +1,6 @@
 {
   "name": "facile-store",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "DB, adaptors, and api for facile studio",
   "main": "server/index.js",
   "repository": {
