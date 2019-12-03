@@ -17,7 +17,7 @@ import Boom from '@hapi/boom';
 
 const server = Hapi.server({
   // listener: http2.createServer(options),
-  port: process.env.PORT || 8001,
+  port: process.env.PORT || 24041,
   routes: {
     validate: {
       failAction: async (request, h, err) => {

@@ -121,7 +121,7 @@ export default server => {
           if (derivatives.length > 0) {
             // TODO: get better URL stragedy.
             const temp = derivatives.map(async media =>
-              fetch(`http://localhost:8002/media`, {
+              fetch(`http://localhost:24042/media`, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'DELETE',
                 body: {filename: media.filename}
