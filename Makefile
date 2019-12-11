@@ -3,11 +3,41 @@ network:
 
 prod:
 	make network
-	docker-compose up
-
+	docker build -t facile-store .
+	docker run -d \
+		--restart=unless-stopped \
+		--network=facile \
+		--uid=0 \
+		--name=db \
+		--mount source=data-node,destination=/data/db \
+		-p 27017:27017 \
+		mongo \
+		mongod --noauth
+	docker run \
+		--restart=unless-stopped \
+		--network=facile \
+		--name=api \
+		-p 24041:24041 \
+		facile-store
 dev:
 	make network
-	docker-compose -f docker-compose.dev.yml up
+	docker build -t facile-store .
+	docker run -d \
+		--restart=unless-stopped \
+		--network=facile \
+		--name=db \
+		--mount source=data-node,destination=/data/db \
+		-p 27017:27017 \
+		mongo \
+		mongod --noauth
+	docker run \
+		--restart=unless-stopped \
+		--network=facile \
+		--name=api \
+		-p 24041:24041 \
+		-p 24051:24051 \
+		--entrypoint=npm \
+		facile-store run dev
 
 build:
 	docker build -t lucestudio/facile-store:v$(v) -t lucestudio/facile-store:latest .
