@@ -5,7 +5,7 @@ clear:
 	make stop
 	docker system prune --volumes --force
 
-clear-all:	
+clear-all:
 	make stop
 	docker system prune --volumes --force --all
 
@@ -22,18 +22,17 @@ prod:
 	docker run -d \
 		--restart=unless-stopped \
 		--network=facile \
-		--uid=0 \
 		--name=db \
 		-p 27017:27017 \
 		mongo \
 		mongod --noauth
-	docker run \
+	docker run -d \
 		--restart=unless-stopped \
 		--network=facile \
 		--name=api \
 		-p 24041:24041 \
-		--mount type=volume,target=/data-node,source=db,destination=/data/db \
-		--mount type=volume,target=/,source=store,destination=/home/node/store \
+		--mount type=volume,target=data-node,source=db,destination=/data/db \
+		--mount type=volume,target=server,source=store,destination=/home/node/store/server \
 		facile-store
 dev:
 	make network
@@ -51,8 +50,8 @@ dev:
 		--name=api \
 		-p 24041:24041 \
 		-p 24051:24051 \
-		--mount type=volume,target=data-node,source=db,destination=/data/db \
-		--mount type=volume,target=server,source=store,destination=/home/node/store/server \
+		--mount type=bind,source="$(CURDIR)"/data-node,target=/data/db \
+		--mount type=bind,source="$(CURDIR)"/server,target=/home/node/store/server \
 		--entrypoint=npm \
 		facile-store run dev
 
