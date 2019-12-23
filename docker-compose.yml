@@ -1,0 +1,30 @@
+version: '3'
+services:
+  api:
+    build: .
+    restart: always
+    ports:
+      - '24041:24041'
+      - '24051:24051'
+    volumes:
+      - .:/home/node/store
+    networks:
+      - facile
+    entrypoint: 'npm run dev'
+    depends_on:
+      - db
+  db:
+    image: mongo
+    restart: always
+    container_name: db
+    volumes:
+      - ./data-node:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth
+    networks:
+      - facile
+networks:
+  facile:
+    external:
+      name: facile
