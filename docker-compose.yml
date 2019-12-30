@@ -10,7 +10,7 @@ services:
       - .:/home/node/store
     networks:
       - facile
-    entrypoint: 'npm run dev'
+    entrypoint: 'npm run local'
     depends_on:
       - db
   db:
