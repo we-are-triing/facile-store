@@ -5,10 +5,12 @@ services:
     restart: always
     ports:
       - '24041:24041'
+      - '24051:24051'
     volumes:
       - .:/home/node/store
     networks:
       - facile
+    entrypoint: 'npm run local'
     depends_on:
       - db
   db:

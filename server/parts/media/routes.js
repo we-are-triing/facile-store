@@ -119,9 +119,8 @@ export default server => {
             return collection.find({master: filename}).toArray();
           });
           if (derivatives.length > 0) {
-            // TODO: get better URL stragedy.
             const temp = derivatives.map(async media =>
-              fetch(`http://localhost:24042/media`, {
+              fetch(`http://media:24042/media`, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'DELETE',
                 body: {filename: media.filename}

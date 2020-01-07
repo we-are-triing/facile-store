@@ -17,6 +17,9 @@ export const getSiteData = async (req, h) => {
   return mongo(async db => {
     const admin = db.collection(constants.admin);
     const temp = await admin.find({}).toArray();
-    return {org: temp[0].org, id: temp[0].id};
+    if (temp.length > 0) {
+      return {org: temp[0].org, id: temp[0].id};
+    }
+    return {org: '', id: ''};
   });
 };
