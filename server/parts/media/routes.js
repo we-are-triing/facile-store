@@ -120,7 +120,7 @@ export default server => {
           });
           if (derivatives.length > 0) {
             const temp = derivatives.map(async media =>
-              fetch(`${process.env.MEDIA_URL}/media`, {
+              fetch(`http://media:24042/media`, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'DELETE',
                 body: {filename: media.filename}
