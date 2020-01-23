@@ -13,9 +13,7 @@ export default server => {
         tags: [`api`],
         validate: {
           payload: {
-            org: joi.string().required(),
-            id: joi.string().required(),
-            secret: joi.string().required()
+            org: joi.string().required()
           }
         }
       },

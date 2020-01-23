@@ -31,6 +31,7 @@
     "@hapi/scooter": "^5.1.0",
     "@hapi/vision": "^5.5.2",
     "blankie": "^4.1.1",
+    "dotenv": "^8.2.0",
     "hapi-swagger": "^10.0.2",
     "mongodb": "^3.2.7",
     "node-fetch": "^2.6.0",

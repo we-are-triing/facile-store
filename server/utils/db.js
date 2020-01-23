@@ -1,8 +1,10 @@
 import mongodb from 'mongodb';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const MongoClient = mongodb.MongoClient;
 const dbName = `facile`;
-const dbUrl = `mongodb://db:27017`;
+const dbUrl = process.env.DB_PATH;
 const options = {useNewUrlParser: true};
 const client = new MongoClient(dbUrl, options);
 

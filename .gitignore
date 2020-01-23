@@ -43,4 +43,5 @@ jspm_packages
 #mongodb
 data-node
 
+.env
 

@@ -5,6 +5,8 @@ import HapiSwagger from 'hapi-swagger';
 import routes from './parts/routes.js';
 import pj from './pj.cjs';
 import Boom from '@hapi/boom';
+import dotenv from 'dotenv';
+dotenv.config();
 
 //Keeping these in as a reference to support http2
 // import http2 from 'http2';
